@@ -5,7 +5,8 @@
 ![License](https://img.shields.io/badge/Data-UCI%20ML%20Breast%20Cancer%20Wisconsin-orange)
 
 ---
-
+## APP LINK
+           https://rvfwfdq9nhkehpbh8tyx22.streamlit.app/
 ## 📂 Project Structure
 
 ```
