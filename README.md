@@ -6,7 +6,7 @@
 
 ---
 ## APP LINK
-           https://rvfwfdq9nhkehpbh8tyx22.streamlit.app/
+https://rvfwfdq9nhkehpbh8tyx22.streamlit.app/
 ## 📂 Project Structure
 
 ```
