@@ -10,18 +10,12 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_curve, auc
 from mpl_toolkits.mplot3d import Axes3D
 
-# -------------------------------
-# Streamlit Page Config
-# -------------------------------
 st.set_page_config(page_title="Breast Cancer Prediction", layout="wide")
 
 st.title("🩺 Breast Cancer Diagnosis with PCA & Random Forest")
 st.markdown("This app uses **Principal Component Analysis (PCA)** and a **Random Forest Classifier** "
             "to classify breast cancer tumors as **Benign (0)** or **Malignant (1)**.")
 
-# -------------------------------
-# Load Dataset
-# -------------------------------
 columns = [
     'ID', 'Diagnosis',
     'radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean',
@@ -39,9 +33,7 @@ df["Diagnosis"] = df["Diagnosis"].map({"M": 1, "B": 0})
 X = df.drop("Diagnosis", axis=1)
 y = df["Diagnosis"]
 
-# -------------------------------
-# Scaling + PCA
-# -------------------------------
+
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
@@ -51,9 +43,6 @@ X_pca2 = pca2.fit_transform(X_scaled)
 pca3 = PCA(n_components=3)
 X_pca3 = pca3.fit_transform(X_scaled)
 
-# -------------------------------
-# Train Random Forest
-# -------------------------------
 X_train, X_test, y_train, y_test = train_test_split(
     X_pca3, y, test_size=0.2, random_state=42, stratify=y
 )
@@ -61,9 +50,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 rf = RandomForestClassifier(n_estimators=200, random_state=42)
 rf.fit(X_train, y_train)
 
-# -------------------------------
-# Evaluation Metrics
-# -------------------------------
 y_pred = rf.predict(X_test)
 y_proba = rf.predict_proba(X_test)[:, 1]
 
@@ -74,7 +60,6 @@ col2.metric("Precision", f"{precision_score(y_test, y_pred):.2f}")
 col3.metric("Recall", f"{recall_score(y_test, y_pred):.2f}")
 col4.metric("F1 Score", f"{f1_score(y_test, y_pred):.2f}")
 
-# Confusion Matrix Heatmap
 cm = confusion_matrix(y_test, y_pred)
 fig_cm, ax = plt.subplots()
 sns.heatmap(cm, annot=True, fmt="d", cmap="viridis", xticklabels=["Benign","Malignant"], yticklabels=["Benign","Malignant"], ax=ax)
@@ -83,7 +68,6 @@ ax.set_ylabel("Actual")
 ax.set_title("Confusion Matrix")
 st.pyplot(fig_cm)
 
-# ROC Curve
 fpr, tpr, _ = roc_curve(y_test, y_proba)
 roc_auc = auc(fpr, tpr)
 fig_roc, ax = plt.subplots()
@@ -95,12 +79,8 @@ ax.set_title("ROC Curve")
 ax.legend()
 st.pyplot(fig_roc)
 
-# -------------------------------
-# PCA Visualization
-# -------------------------------
 st.subheader("🖼 PCA Visualization")
 
-# 2D PCA
 fig2d, ax = plt.subplots(figsize=(8,6))
 scatter = ax.scatter(X_pca2[:,0], X_pca2[:,1], c=y, cmap="coolwarm", s=60, alpha=0.8)
 ax.set_xlabel(f"PC1 ({pca2.explained_variance_ratio_[0]*100:.2f}%)")
@@ -108,7 +88,6 @@ ax.set_ylabel(f"PC2 ({pca2.explained_variance_ratio_[1]*100:.2f}%)")
 ax.set_title("PCA 2D Scatter Plot")
 st.pyplot(fig2d)
 
-# 3D PCA
 fig3d = plt.figure(figsize=(8,6))
 ax = fig3d.add_subplot(111, projection="3d")
 scatter = ax.scatter(X_pca3[:,0], X_pca3[:,1], X_pca3[:,2], c=y, cmap="coolwarm", s=60, alpha=0.8)
@@ -118,9 +97,6 @@ ax.set_zlabel(f"PC3 ({pca3.explained_variance_ratio_[2]*100:.2f}%)")
 ax.set_title("PCA 3D Scatter Plot")
 st.pyplot(fig3d)
 
-# -------------------------------
-# User Input for Prediction
-# -------------------------------
 st.subheader("🔮 Predict New Sample")
 
 input_features = []
